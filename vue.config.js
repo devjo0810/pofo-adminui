@@ -1,8 +1,8 @@
 const { defineConfig } = require("@vue/cli-service");
 module.exports = defineConfig({
   transpileDependencies: true,
-  outputDir: "./docs",
-  publicPath: "/vue-widget-boilerplate",
+  outputDir: "./dist",
+  publicPath: "/",
   css: {
     loaderOptions: {
       scss: {
