@@ -4,6 +4,7 @@ import Menu from "./modules/Menu";
 import WidgetManager from "./modules/WidgetManager";
 import Popup from "./modules/Popup";
 import Toast from "./modules/Toast";
+import Login from "./modules/Login";
 
 Vue.use(Vuex);
 
@@ -13,5 +14,6 @@ export default new Vuex.Store({
     WidgetManager,
     Popup,
     Toast,
+    Login,
   },
 });
