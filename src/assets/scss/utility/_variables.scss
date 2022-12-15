@@ -1,0 +1,27 @@
+$main-layout: (
+  "header-height": 42px,
+);
+
+$widget: (
+  "handle-size": 8px,
+  "minimize-wrapper-height": 36px,
+  "minimize-widget-width": 100px,
+  "widget-header-height": 32px,
+);
+
+$colors: (
+  "black": #222831,
+  "black-lighten1": #393e46,
+  "black-lighten2": #484d55,
+  "point": #00adb5,
+  "point-darken1": #009198,
+  "white": #eeeeee,
+  "white-lighten1": #ffffff,
+  "white-darken1": #cccccc,
+  "white-darken2": #aaaaaa,
+  "red": #dc3c3c,
+  "red-darken1": #b63f3f,
+  "yellow-darken1": #febc22,
+);
+
+$transition: all 0.3s ease;

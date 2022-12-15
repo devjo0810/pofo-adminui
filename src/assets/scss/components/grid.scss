@@ -1,0 +1,26 @@
+.tui-grid-container {
+  font-size: 1.2rem;
+  font-family: "Noto Sans KR", sans-serif, "맑은고딕", "malgun gothic", "AppleGothic", "돋움", "dotum", Helvetica, Arial;
+
+  // font
+  p,
+  input,
+  textarea {
+    font-size: 1.2rem;
+    font-family: "Noto Sans KR", sans-serif, "맑은고딕", "malgun gothic", "AppleGothic", "돋움", "dotum", Helvetica, Arial;
+  }
+
+  .tui-grid-border-line-top {
+    border-color: map-get($colors, "black");
+  }
+
+  // .tui-grid-rside-area {
+  //   width: auto !important;
+  // }
+
+  // checkbox
+  // .tui-grid-cell-row-header > span, // grid header checkbox
+  // .tui-grid-row-header-checkbox { // grid body checkbox
+  //   @include flex-center
+  // }
+}

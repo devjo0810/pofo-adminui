@@ -1,0 +1,15 @@
+.taR {
+  text-align: right;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.flex-item {
+  flex: 1;
+  /* flex: 1 1 0 */
+  // overflow: auto;
+}
