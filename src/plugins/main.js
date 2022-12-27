@@ -14,6 +14,9 @@ import widgetHandler from "./widget-handler";
 import toastHandler from "./toast-handler";
 /* TOAST UI Grid */
 import "./tui-grid";
+/* HTTP(fetch) */
+import httpHandler from "./http";
 
 Vue.use(widgetHandler);
 Vue.use(toastHandler);
+Vue.use(httpHandler);

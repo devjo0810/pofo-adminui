@@ -7,13 +7,21 @@ const APP = {
 
 const API_CONFIG = {
   baseUrl: process.env.VUE_APP_API_BASE_URL,
-  timeout: 100000,
+  timeout: 50000,
   debug: debug,
 };
 
-const HTTP_STATUS = {
-  ok: "200",
-  notFound: "404",
+const HTTP = {
+  METHOD: {
+    GET: "GET",
+    POST: "POST",
+    PUT: "PUT",
+    DELETE: "DELETE",
+  },
+  STATUS: {
+    ok: "200",
+    notFound: "404",
+  },
 };
 
 const WIDGET = {
@@ -91,7 +99,7 @@ export {
   debug,
   APP,
   API_CONFIG,
-  HTTP_STATUS,
+  HTTP,
   WIDGET,
   DIALOG_TYPE,
   TOAST,
