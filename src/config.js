@@ -13,14 +13,25 @@ const API_CONFIG = {
 
 const HTTP = {
   METHOD: {
+    // fetch 기준
     GET: "GET",
     POST: "POST",
     PUT: "PUT",
     DELETE: "DELETE",
   },
   STATUS: {
-    ok: "200",
-    notFound: "404",
+    OK: "200",
+    CREATED: "201",
+    NO_CONTENT: "204",
+    BAD_REQUEST: "400",
+    UNAUTHORIZED: "401",
+    FORBIDDEN: "403",
+    NOT_FOUND: "404",
+    REQUEST_TIMEOUT: "408",
+    PAYLOAD_TOO_LARGE: "413",
+    URI_TOO_LONG: "414",
+    INTERNAL_SERVER_ERROR: "500",
+    BAD_GATEWAY: "502",
   },
 };
 

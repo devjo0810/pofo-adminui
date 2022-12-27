@@ -1,6 +1,5 @@
 import { API_CONFIG, HTTP } from "@/config";
 import { jsonToQs } from "@/utils/util";
-// import vue from "vue";
 
 export default {
   install(Vue) {
@@ -25,11 +24,9 @@ export default {
      * @param {object} httpOption fetch option(http header, request body...)
      * @param {object} option 호출시 전달한 option
      */
-    const defaultRequestBefore = ({ url, httpOption, option }) => {
-      if (defaultOption.debug) {
-        console.log("request before");
-        console.log(url, httpOption, option);
-      }
+    const defaultRequestBefore = ({ url, httpOption }) => {
+      if (!defaultOption.debug) return;
+      console.log("[request before]", "url :", url, "body :", httpOption.body);
     };
 
     /**
@@ -40,17 +37,39 @@ export default {
      * @param {object} option 호출시 전달한 option
      * @param {object} response 호출후 전달받은 response값
      */
-    const defaultRequestAfter = ({ url, httpOption, option, response }) => {
-      if (defaultOption.debug) {
-        console.log("request after");
-        console.log(response);
-        console.log(url, httpOption, option);
+    const defaultRequestAfter = ({ response }) => {
+      if (!defaultOption.debug) return;
+      console.log(
+        "[request after]",
+        "status :",
+        response.status,
+        "result :",
+        response.result
+      );
+    };
+
+    // widget 요청 인터셉터
+    const widgetRequestBefore = ({ option }) => {
+      if (!option) return;
+      const { spinnerOff, compoId } = option;
+      if (spinnerOff) return;
+      if (compoId) {
+        Vue.widget.spinner.on(compoId);
+      }
+    };
+
+    // widget 응답 인터셉터
+    const widgetRequestAfter = ({ option }) => {
+      if (!option) return;
+      const { compoId } = option;
+      if (compoId) {
+        Vue.widget.spinner.off(compoId);
       }
     };
 
     const interceptor = {
-      request: [defaultRequestBefore],
-      response: [defaultRequestAfter],
+      request: [defaultRequestBefore, widgetRequestBefore],
+      response: [defaultRequestAfter, widgetRequestAfter],
     };
 
     /**
@@ -73,9 +92,7 @@ export default {
     const send = async (httpMethod, url, params, option) => {
       params = convertParams(httpMethod, params);
       url = httpMethod === HTTP.METHOD.GET ? url + params : url;
-      // url =
-      //   defaultOption.baseUrl +
-      //   (httpMethod === HTTP.METHOD.GET && url + params);
+
       const headers = { ...defaultOption.headers };
       if (option && option.headers) {
         Object.assign(headers, option.headers);
@@ -90,23 +107,19 @@ export default {
       if (body) httpOption.body = body;
 
       interceptor.request.forEach((fn) => fn({ url, httpOption, option }));
-      let response = null;
-      try {
-        const timeoutId = setTimeout(
-          () => controller.abort(),
-          defaultOption.timeout
-        );
-        response = await fetch(url, httpOption);
-        clearTimeout(timeoutId);
-      } catch (e) {
-        console.log(e);
-        response = e;
-      }
+      const timeoutId = setTimeout(
+        () => controller.abort(),
+        defaultOption.timeout
+      );
+      const response = await fetch(url, httpOption);
+      clearTimeout(timeoutId);
+      const result = await response.json();
+      response.result = result;
       interceptor.response.forEach((fn) =>
         fn({ url, httpOption, option, response })
       );
 
-      return response;
+      return result;
     };
 
     const http = {
