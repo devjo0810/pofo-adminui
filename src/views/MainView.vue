@@ -10,12 +10,21 @@
 <script>
 import WidgetManager from "@/components/widget/WidgetManager";
 import MinimizeWidgetManager from "@/components/widget/MinimizeWidgetManager";
+import { mapActions } from "vuex";
 
 export default {
   name: "HomeView",
   components: {
     WidgetManager,
     MinimizeWidgetManager,
+  },
+  methods: {
+    ...mapActions({
+      loadAdminMenus: "Menu/loadAdminMenus",
+    }),
+  },
+  async created() {
+    await Promise.all([this.loadAdminMenus()]);
   },
 };
 </script>

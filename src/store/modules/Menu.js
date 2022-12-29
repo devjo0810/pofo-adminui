@@ -1,3 +1,40 @@
+import Vue from "vue";
+
+const state = {
+  widgetMenuList: [],
+};
+
+const getters = {
+  getWidgetMenuList(state) {
+    return state.widgetMenuList;
+  },
+};
+
+const mutations = {
+  setWidgetMenuList(state, widgetMenuList) {
+    state.widgetMenuList = [...widgetMenuList];
+  },
+};
+
+const actions = {
+  // 관리자메뉴 불러오기
+  async loadAdminMenus({ commit }) {
+    let { result } = await Vue.http.get("/api/appmgmt/admin/menus");
+    if (!result) {
+      result = sampleMenuList;
+    }
+    commit("setWidgetMenuList", result);
+  },
+};
+
+export default {
+  namespaced: true,
+  state,
+  getters,
+  mutations,
+  actions,
+};
+
 const sampleMenuList = [
   {
     parentMenuId: "0",
@@ -114,29 +151,3 @@ const sampleMenuList = [
     isOnlyOne: true,
   },
 ];
-
-const state = {
-  widgetMenuList: [...sampleMenuList],
-};
-
-const getters = {
-  getWidgetMenuList(state) {
-    return state.widgetMenuList;
-  },
-};
-
-const mutations = {
-  setWidgetMenuList(state, widgetMenuList) {
-    state.widgetMenuList = [...widgetMenuList];
-  },
-};
-
-const actions = {};
-
-export default {
-  namespaced: true,
-  state,
-  getters,
-  mutations,
-  actions,
-};

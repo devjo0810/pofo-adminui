@@ -53,18 +53,19 @@ export default {
       if (!option) return;
       const { spinnerOff, compoId } = option;
       if (spinnerOff) return;
-      if (compoId) {
-        Vue.widget.spinner.on(compoId);
-      }
+      if (!compoId) return;
+      Vue.widget.spinner.on(compoId);
     };
 
     // widget 응답 인터셉터
-    const widgetRequestAfter = ({ option }) => {
+    const widgetRequestAfter = ({ option, response }) => {
       if (!option) return;
-      const { compoId } = option;
-      if (compoId) {
-        Vue.widget.spinner.off(compoId);
-      }
+      const { compoId, toastOff } = option;
+      if (!compoId) return;
+      const { error } = response;
+      Vue.widget.spinner.off(compoId);
+      if (!error || toastOff) return;
+      Vue.toast.danger(error.message);
     };
 
     const interceptor = {
@@ -87,6 +88,38 @@ export default {
         case HTTP.METHOD.DELETE:
           return JSON.stringify(params);
       }
+    };
+
+    // http response 에러 체크
+    const httpResponseHandle = async (response) => {
+      const { status } = response;
+      const { STATUS } = HTTP;
+      let result = null;
+      let error = null;
+      // http status code 핸들링
+      switch (status) {
+        case STATUS.OK:
+        case STATUS.CREATED:
+          result = await response.json();
+          break;
+        case STATUS.NO_CONTENT:
+        case STATUS.BAD_REQUEST:
+        case STATUS.UNAUTHORIZED:
+        case STATUS.FORBIDDEN:
+        case STATUS.NOT_FOUND:
+        case STATUS.REQUEST_TIMEOUT:
+        case STATUS.PAYLOAD_TOO_LARGE:
+        case STATUS.URI_TOO_LONG:
+        case STATUS.INTERNAL_SERVER_ERROR:
+        case STATUS.BAD_GATEWAY:
+          error = { status, message: HTTP.ERROR_MESSAGE[status] };
+          break;
+        default: {
+          error = { status, message: "알수없는 오류가 발생하였습니다." };
+          break;
+        }
+      }
+      return { result, error };
     };
 
     const send = async (httpMethod, url, params, option) => {
@@ -113,13 +146,14 @@ export default {
       );
       const response = await fetch(url, httpOption);
       clearTimeout(timeoutId);
-      const result = await response.json();
+      const { result, error } = await httpResponseHandle(response);
       response.result = result;
+      response.error = error;
       interceptor.response.forEach((fn) =>
         fn({ url, httpOption, option, response })
       );
 
-      return result;
+      return response;
     };
 
     const http = {
