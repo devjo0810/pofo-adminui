@@ -1,4 +1,4 @@
-import { API_CONFIG, HTTP } from "@/config";
+import { API_CONFIG, HTTP, debug } from "@/config";
 import { jsonToQs } from "@/utils/util";
 
 export default {
@@ -7,7 +7,7 @@ export default {
     const defaultOption = {
       baseUrl: API_CONFIG.baseUrl,
       timeout: API_CONFIG.timeout,
-      debug: API_CONFIG.debug,
+      debug,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -102,8 +102,11 @@ export default {
         case STATUS.CREATED:
           result = await response.json();
           break;
-        case STATUS.NO_CONTENT:
         case STATUS.BAD_REQUEST:
+          result = await response.json();
+          error = { status, message: HTTP.ERROR_MESSAGE[status] };
+          break;
+        case STATUS.NO_CONTENT:
         case STATUS.UNAUTHORIZED:
         case STATUS.FORBIDDEN:
         case STATUS.NOT_FOUND:
@@ -114,6 +117,10 @@ export default {
         case STATUS.BAD_GATEWAY:
           error = { status, message: HTTP.ERROR_MESSAGE[status] };
           break;
+        case STATUS.CLIENT_CUSTOM_ERROR:
+        case STATUS.SERVER_CUSTOM_ERROR:
+          error = { status, message: response.message };
+          break;
         default: {
           error = { status, message: "알수없는 오류가 발생하였습니다." };
           break;
@@ -122,33 +129,62 @@ export default {
       return { result, error };
     };
 
+    const customErrorHandle = (error) => {
+      const { name } = error;
+      switch (name) {
+        // client request timeout
+        case "AbortError": {
+          return {
+            status: 499,
+            message: "서비스 요청시간이 초과하였습니다.",
+          };
+        }
+      }
+      throw error;
+    };
+
     const send = async (httpMethod, url, params, option) => {
+      // parameter setting... querystring or json
       params = convertParams(httpMethod, params);
       url = httpMethod === HTTP.METHOD.GET ? url + params : url;
 
+      // HTTP header setting
       const headers = { ...defaultOption.headers };
       if (option && option.headers) {
         Object.assign(headers, option.headers);
       }
+
+      // HTTP body setting... GET요청일 경우 지정안함
       const body = httpMethod !== HTTP.METHOD.GET ? params : null;
+
       const controller = new AbortController(); // fetch timeout 처리용
+
+      // fetch option setting
       const httpOption = {
         method: httpMethod,
         headers,
-        signal: controller.signal,
+        signal: controller.signal, // client timeout 신호전달용
       };
       if (body) httpOption.body = body;
 
+      // before interceptor execute
       interceptor.request.forEach((fn) => fn({ url, httpOption, option }));
+
+      // client timeout setting
       const timeoutId = setTimeout(
         () => controller.abort(),
         defaultOption.timeout
       );
-      const response = await fetch(url, httpOption);
-      clearTimeout(timeoutId);
+
+      // send api
+      const response = await fetch(url, httpOption).catch(customErrorHandle);
+      clearTimeout(timeoutId); // clear client timeout
+
       const { result, error } = await httpResponseHandle(response);
-      response.result = result;
-      response.error = error;
+      response.result = result; // 정상일경우
+      response.error = error; // 에러일경우
+
+      // after interceptor execute
       interceptor.response.forEach((fn) =>
         fn({ url, httpOption, option, response })
       );

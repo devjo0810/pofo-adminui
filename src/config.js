@@ -7,8 +7,7 @@ const APP = {
 
 const API_CONFIG = {
   baseUrl: process.env.VUE_APP_API_BASE_URL,
-  timeout: 50000,
-  debug: debug,
+  timeout: 50000, // 50s
 };
 
 const HTTP = {
@@ -30,8 +29,10 @@ const HTTP = {
     REQUEST_TIMEOUT: 408,
     PAYLOAD_TOO_LARGE: 413,
     URI_TOO_LONG: 414,
+    CLIENT_CUSTOM_ERROR: 499,
     INTERNAL_SERVER_ERROR: 500,
     BAD_GATEWAY: 502,
+    SERVER_CUSTOM_ERROR: 599,
   },
 };
 HTTP.ERROR_MESSAGE = {
@@ -43,8 +44,10 @@ HTTP.ERROR_MESSAGE = {
   [HTTP.STATUS.REQUEST_TIMEOUT]: "요청시간을 초과하였습니다.",
   [HTTP.STATUS.PAYLOAD_TOO_LARGE]: "요청값이 너무 큽니다.",
   [HTTP.STATUS.URI_TOO_LONG]: "요청URI가 너무 깁니다.",
+  [HTTP.STATUS.CLIENT_CUSTOM_ERROR]: "클라이언트 지정 예외 발생",
   [HTTP.STATUS.INTERNAL_SERVER_ERROR]: "서버에서 오류가 발생하였습니다.",
   [HTTP.STATUS.BAD_GATEWAY]: "게이트웨이에서 처리중 오류가 발생하였습니다.",
+  [HTTP.STATUS.SERVER_CUSTOM_ERROR]: "서버 지정 예외 발생",
 };
 
 const WIDGET = {

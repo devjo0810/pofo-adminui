@@ -21,7 +21,7 @@ export default {
       await this.$http.get(
         "https://reqres.in/api/users",
         {
-          delay: "3",
+          delay: "2",
         },
         {
           compoId: this.compoId,
@@ -29,13 +29,23 @@ export default {
       );
     },
     post() {
-      this.$http.post("https://httpbin.org/post", { test: "A", call: "B" });
+      this.$http.post(
+        "https://httpbin.org/post",
+        { test: "A", call: "B" },
+        {
+          compoId: this.compoId,
+        }
+      );
     },
     put() {
-      this.$http.put("https://httpbin.org/put");
+      this.$http.put("https://httpbin.org/put", null, {
+        compoId: this.compoId,
+      });
     },
     deleteH() {
-      this.$http.delete("https://httpbin.org/delete");
+      this.$http.delete("https://httpbin.org/delete", null, {
+        compoId: this.compoId,
+      });
     },
     async appmgmtGet() {
       await this.$http.get("/api/appmgmt/codes/1", null, {
