@@ -100,6 +100,15 @@ const TUI_GRID = {
       columnOptions: this.COLUMN_OPTIONS,
     };
   },
+  update() {
+    return {
+      rowHeight: this.ROW_HEIGHT,
+      minRowHeight: this.MIN_ROW_HEIGHT,
+      header: this.HEADER,
+      rowHeaders: [...this.ROW_HEADERS, "checkbox"],
+      columnOptions: this.COLUMN_OPTIONS,
+    };
+  },
 };
 
 const TUI_TO_DAYJS = {

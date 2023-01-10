@@ -150,4 +150,28 @@ const sampleMenuList = [
     isWidget: true,
     isOnlyOne: true,
   },
+  {
+    title: "기준자료 관리",
+    parentMenuId: "0",
+    menuId: "5",
+    sortSqnc: 1,
+    compoName: null,
+    isWidget: false,
+    menuList: [
+      {
+        parentMenuId: "5",
+        menuId: "501",
+        title: "메뉴 관리",
+        compoName: "MenuManage",
+        isWidget: true,
+      },
+      {
+        parentMenuId: "5",
+        menuId: "502",
+        title: "코드 관리",
+        compoName: "CodeManage",
+        isWidget: true,
+      },
+    ],
+  },
 ];

@@ -14,6 +14,16 @@
     border-color: map-get($colors, "black");
   }
 
+  // text editor
+  .tui-grid-cell-content input[type='text'], .tui-grid-cell-content input[type='password'] {
+    padding: 1px 2px 2px 2px;
+  }
+
+  // header checkbox cell
+  .tui-grid-row-header-checkbox {
+    @include flex-center;
+  }
+
   // .tui-grid-rside-area {
   //   width: auto !important;
   // }
