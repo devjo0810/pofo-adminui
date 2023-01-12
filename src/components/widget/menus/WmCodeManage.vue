@@ -41,11 +41,23 @@
       </SearchArea>
     </div>
     <div class="body flex-item">
-      <div class="h50p pb10">
-        <TuiGrid ref="masterGrid" v-bind="masterGridProps" />
+      <div class="h50p pb10 flex-column">
+        <div class="flex-auto">
+          <TuiGrid ref="masterGrid" v-bind="masterGridProps" />
+        </div>
+        <div class="button-area mt5">
+          <CommonTextButton label="행 추가" @click="appendRowForMaster" />
+          <CommonTextButton label="저장" @click="saveForMaster" />
+        </div>
       </div>
-      <div class="h50p">
-        <TuiGrid ref="detailGrid" v-bind="detailGridProps" />
+      <div class="h50p flex-column">
+        <div class="flex-auto">
+          <TuiGrid ref="detailGrid" v-bind="detailGridProps" />
+        </div>
+        <div class="button-area mt5">
+          <CommonTextButton label="행 추가" @click="appendRowForDetail" />
+          <CommonTextButton label="저장" @click="saveForDetail" />
+        </div>
       </div>
     </div>
     <WidgetSpinner :id="compoId" />
@@ -61,6 +73,7 @@ import CommonTextButton from "@/components/common/CommonTextButton.vue";
 import { Grid as TuiGrid } from "@toast-ui/vue-grid";
 import { TUI_GRID } from "@/config";
 import { mapGetters } from "vuex";
+import { appendRow, setColumnByUseYn } from "@/utils/tui-grid-handler";
 
 export default {
   extends: Base,
@@ -102,66 +115,99 @@ export default {
       bodyHeight: "fitToParent",
       columns: [
         {
-          header: "cmmCdGrpId",
-          name: "코드그룹아이디",
+          header: "코드그룹아이디",
+          name: "cmmCdGrpId",
           editor: "text",
           validation: { required: true, dataType: "string" },
         },
         {
-          header: "cmmCdGrpNm",
-          name: "코드그룹명",
+          header: "코드그룹명",
+          name: "cmmCdGrpNm",
           editor: "text",
           validation: { required: true, dataType: "string" },
         },
-        { header: "menuId", name: "menuId" },
-        { header: "sortSqnc", name: "sortSqnc" },
-        { header: "title", name: "title" },
-      ],
-      data: [
         {
-          name: "Beautiful Lies",
-          artist: "Birdy",
-          menuId: "1",
-          sortSqnc: 1,
-          title: "사용자관리",
+          header: "코드그룹설명",
+          name: "cmmCdGrpDsc",
+          editor: "text",
         },
         {
-          name: "X",
-          artist: "Ed Sheeran",
-          menuId: "2",
-          sortSqnc: 2,
-          title: "사용자추가",
+          header: "사용여부",
+          name: "useYn",
         },
+        { header: "등록자", name: "rgsrNm" },
+        { header: "등록일시", name: "regDt" },
+        { header: "수정자", name: "upsrNm" },
+        { header: "수정일시", name: "updtDt" },
       ],
+      data: [],
     },
     detailGridProps: {
-      ...TUI_GRID.default(),
+      ...TUI_GRID.update(),
       bodyHeight: "fitToParent",
       columns: [
-        { header: "Name", name: "name" },
-        { header: "Artist", name: "artist" },
-        { header: "menuId", name: "menuId" },
-        { header: "sortSqnc", name: "sortSqnc" },
-        { header: "title", name: "title" },
-      ],
-      data: [
         {
-          name: "Beautiful Lies",
-          artist: "Birdy",
-          menuId: "1",
-          sortSqnc: 1,
-          title: "사용자관리",
+          header: "코드그룹아이디",
+          name: "cmmCdGrpId",
+          editor: "text",
+          validation: { required: true, dataType: "string" },
         },
         {
-          name: "X",
-          artist: "Ed Sheeran",
-          menuId: "2",
-          sortSqnc: 2,
-          title: "사용자추가",
+          header: "코드",
+          name: "cmmCd",
+          editor: "text",
+          validation: { required: true, dataType: "string" },
         },
+        {
+          header: "코드명",
+          name: "cmmCdNm",
+          editor: "text",
+          validation: { required: true, dataType: "string" },
+        },
+        {
+          header: "코드설명",
+          name: "cmmCdDsc",
+          editor: "text",
+        },
+        {
+          header: "정렬순서",
+          name: "sortSqnc",
+          editor: "text",
+          validation: { required: true, dataType: "number", min: 0 },
+        },
+        {
+          header: "참조아이디1",
+          name: "rferId1",
+          editor: "text",
+        },
+        {
+          header: "참조아이디2",
+          name: "rferId2",
+          editor: "text",
+        },
+        {
+          header: "참조아이디3",
+          name: "rferId3",
+          editor: "text",
+        },
+        {
+          header: "참조아이디4",
+          name: "rferId4",
+          editor: "text",
+        },
+        { header: "사용여부", name: "useYn" },
+        { header: "등록자", name: "rgsrNm" },
+        { header: "등록일시", name: "regDt" },
+        { header: "수정자", name: "upsrNm" },
+        { header: "수정일시", name: "updtDt" },
       ],
+      data: [],
     },
   }),
+  created() {
+    setColumnByUseYn(this.masterGridProps.columns, "useYn");
+    setColumnByUseYn(this.detailGridProps.columns, "useYn");
+  },
   methods: {
     gridAutoResizing() {
       this.masterGridInstance.refreshLayout();
@@ -173,6 +219,20 @@ export default {
     initSearchData() {
       const originData = this.$options.data();
       this.searchData = { ...originData.searchData };
+    },
+    appendRowForMaster() {
+      appendRow(this.masterGridInstance, { useYn: "1" });
+    },
+    saveForMaster() {
+      const items = this.masterGridInstance.getCheckedRows();
+      console.log(items);
+    },
+    appendRowForDetail() {
+      appendRow(this.detailGridInstance, { sortSqnc: 0, useYn: "1" });
+    },
+    saveForDetail() {
+      const items = this.detailGridInstance.getCheckedRows();
+      console.log(items);
     },
   },
 };

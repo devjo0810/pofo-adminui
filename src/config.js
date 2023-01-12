@@ -115,6 +115,11 @@ const TUI_TO_DAYJS = {
   "yyyy-MM-dd": "YYYY-MM-DD",
 };
 
+const TUI_USE_YN_ITEMS = [
+  { text: "사용", value: "1" },
+  { text: "사용안함", value: "0" },
+];
+
 const SEARCH = {
   TYPE: {
     DATE: "date",
@@ -140,5 +145,6 @@ export {
   TOAST,
   TUI_GRID,
   TUI_TO_DAYJS,
+  TUI_USE_YN_ITEMS,
   SEARCH,
 };
