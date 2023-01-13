@@ -69,6 +69,9 @@ export default {
     display: flex;
     align-items: center;
     padding-left: 8px;
+    p {
+      font-size: 1.2rem;
+    }
   }
   .btn-section {
     display: flex;

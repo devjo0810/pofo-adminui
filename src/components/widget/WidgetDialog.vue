@@ -89,29 +89,32 @@ export default {
   .common-dialog {
     background-color: map-get($colors, "white-lighten1");
     border: 1px solid map-get($colors, "black");
-    width: 200px;
+    min-width: 250px;
     .dialog-header {
       @include flex-center;
       background-color: map-get($colors, "black");
       color: map-get($colors, "white");
       padding: 5px 0;
+      font-size: 1.3rem;
       h3 {
         margin: 0;
       }
     }
     .dialog-body {
       @include flex-start;
-      padding: 10px 5px;
+      padding: 20px 5px;
       width: 100%;
       max-height: 400px;
       overflow-y: auto;
+      font-size: 1.2rem;
     }
     .dialog-footer {
       @include flex-center;
-      padding: 5px 0;
+      padding: 5px;
       border-top: 1px solid map-get($colors, "white-darken2");
       button {
         @include list-margin-right(5px);
+        flex: 1;
       }
     }
   }

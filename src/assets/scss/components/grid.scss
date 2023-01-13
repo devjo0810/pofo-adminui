@@ -19,6 +19,18 @@
     padding: 1px 2px 2px 2px;
   }
 
+  // select editor
+  .tui-grid-editor-select-box-layer > .tui-select-box {
+    top: -3px;
+  }
+  .tui-select-box-input, .tui-select-box-item-group-label, .tui-select-box-item {
+    height: 25px;
+    font-size: 12px;
+  }
+  .tui-select-box-placeholder, .tui-select-box-item-group-label, .tui-select-box-item {
+    line-height: 25px;
+  }
+
   // header checkbox cell
   .tui-grid-row-header-checkbox {
     @include flex-center;

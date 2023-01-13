@@ -88,25 +88,29 @@ TOAST.ICON = {
 const TUI_GRID = {
   ROW_HEIGHT: 30,
   MIN_ROW_HEIGHT: 30,
+  BODY_HEIGHT: "fitToParent",
   HEADER: { height: 30 },
-  ROW_HEADERS: ["rowNum"],
   COLUMN_OPTIONS: { resizable: true, minWidth: 70 },
   default() {
     return {
       rowHeight: this.ROW_HEIGHT,
       minRowHeight: this.MIN_ROW_HEIGHT,
+      bodyHeight: this.BODY_HEIGHT,
       header: this.HEADER,
-      rowHeaders: this.ROW_HEADERS,
+      rowHeaders: ["rowNum"],
       columnOptions: this.COLUMN_OPTIONS,
+      data: [],
     };
   },
   update() {
     return {
       rowHeight: this.ROW_HEIGHT,
       minRowHeight: this.MIN_ROW_HEIGHT,
+      bodyHeight: this.BODY_HEIGHT,
       header: this.HEADER,
-      rowHeaders: [...this.ROW_HEADERS, "checkbox"],
+      rowHeaders: ["rowNum", "checkbox"],
       columnOptions: this.COLUMN_OPTIONS,
+      data: [],
     };
   },
 };
@@ -117,7 +121,7 @@ const TUI_TO_DAYJS = {
 
 const TUI_USE_YN_ITEMS = [
   { text: "사용", value: "1" },
-  { text: "사용안함", value: "0" },
+  { text: "미사용", value: "0" },
 ];
 
 const SEARCH = {

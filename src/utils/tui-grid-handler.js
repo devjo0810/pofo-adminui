@@ -15,3 +15,7 @@ export const setColumnByUseYn = (columns, name) => {
     },
   };
 };
+
+export const getUnValidRow = (rowKeys, unValidList) => {
+  return unValidList.find((row) => rowKeys.includes(row.rowKey));
+};
