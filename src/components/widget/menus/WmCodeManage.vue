@@ -49,6 +49,7 @@
             ref="masterGrid"
             v-bind="masterGridProps"
             @dblclick="handleDbclickForMaster"
+            @editingStart="handleEditingStartForMaster"
           />
         </div>
         <div class="button-area mt5">
@@ -58,7 +59,11 @@
       </div>
       <div class="h50p flex-column">
         <div class="flex-auto">
-          <TuiGrid ref="detailGrid" v-bind="detailGridProps" />
+          <TuiGrid
+            ref="detailGrid"
+            v-bind="detailGridProps"
+            @editingStart="handleEditingStartForDetail"
+          />
         </div>
         <div class="button-area mt5">
           <CommonTextButton label="행 추가" @click="appendRowForDetail" />
@@ -116,6 +121,7 @@ export default {
     widgetSizeReset: "gridAutoResizing",
   },
   data: () => ({
+    selectCmmCdGrpId: "",
     searchData: {
       cmmCdGrpId: "",
       cmmCdGrpNm: "",
@@ -214,6 +220,9 @@ export default {
     setColumnByUseYn(this.masterGridProps.columns, "useYn");
     setColumnByUseYn(this.detailGridProps.columns, "useYn");
   },
+  mounted() {
+    window.grid = this.masterGridInstance;
+  },
   methods: {
     gridAutoResizing() {
       this.masterGridInstance.refreshLayout();
@@ -234,7 +243,7 @@ export default {
       this.masterGridInstance.resetData(result.result);
     },
     appendRowForMaster() {
-      appendRow(this.masterGridInstance, { useYn: "1" });
+      appendRow(this.masterGridInstance, { useYn: "1", isNew: true });
     },
     async saveForMaster() {
       const rowKeys = this.masterGridInstance.getCheckedRowKeys();
@@ -275,21 +284,104 @@ export default {
         this.$toast.ok("마스터 코드를 저장하였습니다.");
       }
     },
-    searchForDetail(cmmCdGrpId) {
-      console.log(cmmCdGrpId);
+    async searchForDetail(cmmCdGrpId) {
+      this.selectCmmCdGrpId = cmmCdGrpId;
+      const { result } = await this.$http.get(
+        "/api/appmgmt/codes/detail",
+        { cmmCdGrpId },
+        {
+          compoId: this.compoId,
+        }
+      );
+      this.detailGridInstance.resetData(result.result);
     },
     appendRowForDetail() {
-      appendRow(this.detailGridInstance, { sortSqnc: 0, useYn: "1" });
+      appendRow(this.detailGridInstance, {
+        cmmCdGrpId: this.selectCmmCdGrpId,
+        sortSqnc: 0,
+        useYn: "1",
+        isNew: true,
+      });
     },
-    saveForDetail() {
-      const items = this.detailGridInstance.getCheckedRows();
-      console.log(items);
+    async saveForDetail() {
+      const rowKeys = this.detailGridInstance.getCheckedRowKeys();
+      if (!rowKeys.length) {
+        this.$widget.alert(
+          this.compoId,
+          "상세 그리드에 선택된 항목이 없습니다."
+        );
+        return;
+      }
+
+      const unValidList = this.detailGridInstance.validate();
+      const isUnValidRow = getUnValidRow(rowKeys, unValidList);
+      if (isUnValidRow) {
+        this.$widget.alert(
+          this.compoId,
+          "선택된 항목중 유효하지 않은 값이 존재합니다."
+        );
+        return;
+      }
+
+      const items = this.detailGridInstance
+        .getCheckedRows()
+        .map(
+          ({
+            sersNum,
+            cmmCdGrpId,
+            cmmCd,
+            cmmCdNm,
+            cmmCdDsc,
+            sortSqnc,
+            useYn,
+            refrId1,
+            refrId2,
+            refrId3,
+            refrId4,
+          }) => ({
+            sersNum,
+            cmmCdGrpId,
+            cmmCd,
+            cmmCdNm,
+            cmmCdDsc,
+            sortSqnc,
+            useYn: useYn === "1" ? true : false,
+            refrId1,
+            refrId2,
+            refrId3,
+            refrId4,
+          })
+        );
+      const isTrue = await this.$widget.confirm(
+        this.compoId,
+        `${items.length} 건 저장하시겠습니까?`
+      );
+      if (!isTrue) return;
+
+      const { result } = await this.$http.post(
+        "/api/appmgmt/codes/detail",
+        items
+      );
+      if (result) {
+        this.$toast.ok("상세 코드를 저장하였습니다.");
+      }
     },
     handleDbclickForMaster({ rowKey }) {
       const row = this.masterGridInstance.getRow(rowKey);
-      console.log(row);
-      if (row.cmmCdGrpId) {
+      if (row && row.cmmCdGrpId) {
         this.searchForDetail(row.cmmCdGrpId);
+      }
+    },
+    handleEditingStartForMaster({ columnName, rowKey }) {
+      const row = this.masterGridInstance.getRow(rowKey);
+      if (columnName === "cmmCdGrpId" && row && !row.isNew) {
+        this.$nextTick(() => this.masterGridInstance.cancelEditing());
+      }
+    },
+    handleEditingStartForDetail({ columnName, rowKey }) {
+      const row = this.detailGridInstance.getRow(rowKey);
+      if (columnName === "cmmCdGrpId" && row && !row.isNew) {
+        this.$nextTick(() => this.detailGridInstance.cancelEditing());
       }
     },
   },
