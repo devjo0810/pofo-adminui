@@ -1,5 +1,11 @@
 <template>
-  <button class="common-text-button" :class="color" @click="$emit('click')">
+  <button
+    ref="button"
+    class="common-text-button"
+    :class="color"
+    @click="$emit('click')"
+    @keyup.enter="$emit('click')"
+  >
     {{ label }}
   </button>
 </template>
@@ -13,6 +19,12 @@ export default {
       type: String,
       required: false,
     },
+    isFocus: Boolean,
+  },
+  mounted() {
+    if (this.isFocus) {
+      this.$refs.button.focus();
+    }
   },
 };
 </script>

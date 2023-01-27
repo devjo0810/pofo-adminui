@@ -9,7 +9,12 @@
           <p>{{ message }}</p>
         </div>
         <div class="dialog-footer">
-          <CommonTextButton label="확인" color="primary" @click="close(true)" />
+          <CommonTextButton
+            label="확인"
+            color="primary"
+            :isFocus="true"
+            @click="close(true)"
+          />
           <CommonTextButton
             v-if="type === DIALOG_TYPE.CONFIRM"
             label="취소"
