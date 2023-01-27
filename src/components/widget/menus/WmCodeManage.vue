@@ -185,6 +185,7 @@ export default {
         {
           header: "정렬순서",
           name: "sortSqnc",
+          align: "right",
           editor: "text",
           validation: { required: true, dataType: "number", min: 0 },
         },
@@ -241,11 +242,13 @@ export default {
         }
       );
       this.masterGridInstance.resetData(result.result);
+      this.detailGridInstance.resetData([]);
     },
     appendRowForMaster() {
       appendRow(this.masterGridInstance, { useYn: "1", isNew: true });
     },
     async saveForMaster() {
+      this.masterGridInstance.finishEditing();
       const rowKeys = this.masterGridInstance.getCheckedRowKeys();
       if (!rowKeys.length) {
         this.$widget.alert(
@@ -304,6 +307,7 @@ export default {
       });
     },
     async saveForDetail() {
+      this.detailGridInstance.finishEditing();
       const rowKeys = this.detailGridInstance.getCheckedRowKeys();
       if (!rowKeys.length) {
         this.$widget.alert(
