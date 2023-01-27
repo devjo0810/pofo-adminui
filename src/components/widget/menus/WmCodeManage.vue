@@ -221,9 +221,6 @@ export default {
     setColumnByUseYn(this.masterGridProps.columns, "useYn");
     setColumnByUseYn(this.detailGridProps.columns, "useYn");
   },
-  mounted() {
-    window.grid = this.masterGridInstance;
-  },
   methods: {
     gridAutoResizing() {
       this.masterGridInstance.refreshLayout();

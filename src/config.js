@@ -120,8 +120,8 @@ const TUI_TO_DAYJS = {
 };
 
 const TUI_USE_YN_ITEMS = [
-  { text: "사용", value: "1" },
-  { text: "미사용", value: "0" },
+  { text: "Y", value: "1" },
+  { text: "N", value: "0" },
 ];
 
 const SEARCH = {
