@@ -16,7 +16,7 @@
             @click="close(true)"
           />
           <CommonTextButton
-            v-if="type === DIALOG_TYPE.CONFIRM"
+            v-if="cancelButtonShow"
             label="취소"
             @click="close(false)"
           />
@@ -61,6 +61,9 @@ export default {
     },
     callback() {
       return this.dialogOptions.callback;
+    },
+    cancelButtonShow() {
+      return this.type === DIALOG_TYPE.CONFIRM;
     },
   },
   data: () => ({
