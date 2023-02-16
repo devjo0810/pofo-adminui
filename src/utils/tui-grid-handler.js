@@ -22,7 +22,7 @@ export const setColumnByCode = async (columns, name, codeGroupNm) => {
   const { result } = await Vue.http.get("/api/appmgmt/codes/detail", {
     cmmCdGrpId: codeGroupNm,
   });
-  const listItems = result.result.map((item) => ({
+  const listItems = result.data.map((item) => ({
     text: item.cmmCdNm,
     value: item.cmmCd,
   }));

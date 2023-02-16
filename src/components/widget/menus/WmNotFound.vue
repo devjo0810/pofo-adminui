@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>WidgetMenuNotFound</p>
+    <p>{{ wdgtMenuNm }} NotFound</p>
     <WidgetSpinner :id="compoId" />
     <WidgetDialog :id="compoId" />
   </div>
@@ -17,14 +17,14 @@ export default {
     ...mapGetters({
       widgetList: "WidgetManager/getWidgetList",
     }),
-    compoName() {
+    wdgtMenuNm() {
       const widget = this.widgetList.find((item) => item.id === this.compoId);
-      return widget.compoName;
+      return widget.wdgtMenuNm;
     },
   },
   mounted() {
     this.$toast.danger(
-      `${this.compoName} 일치하는 위젯 컴포넌트를 찾을 수 없습니다.`
+      `${this.wdgtMenuNm} 일치하는 위젯 컴포넌트를 찾을 수 없습니다.`
     );
   },
 };

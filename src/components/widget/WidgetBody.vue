@@ -23,7 +23,7 @@ export default {
       type: String,
       required: true,
     },
-    compoName: {
+    wdgtMenuNm: {
       // Widget 컴포넌트명
       type: String,
     },
@@ -35,7 +35,7 @@ export default {
   computed: {
     // 동적 컴포넌트 로딩
     component() {
-      const menuName = WIDGET.MENU_PREFIX + this.compoName;
+      const menuName = WIDGET.MENU_PREFIX + this.wdgtMenuNm;
       return () =>
         import(`@/components/widget/menus/${menuName}`).catch(() => NotFound);
     },

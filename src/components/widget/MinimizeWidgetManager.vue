@@ -7,7 +7,7 @@
       :class="{ active: item.id === maxZindexId && !item.isMinimize }"
       @mousedown.left="toggleMinimizingWidget(item.id)"
     >
-      <p>{{ item.title }}</p>
+      <p>{{ item.menuNm }}</p>
     </div>
   </div>
 </template>

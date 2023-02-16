@@ -139,6 +139,11 @@ SEARCH.COMPO_NAME = {
   [SEARCH.TYPE.BUTTON]: "CommonTextButton",
 };
 
+const MENU_DVSN = {
+  ADMIN: "100",
+  USER: "200",
+};
+
 export {
   debug,
   APP,
@@ -151,4 +156,5 @@ export {
   TUI_TO_DAYJS,
   TUI_USE_YN_ITEMS,
   SEARCH,
+  MENU_DVSN,
 };

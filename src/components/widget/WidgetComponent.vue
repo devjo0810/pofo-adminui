@@ -22,7 +22,7 @@
     @resizestop="handleResizingStop"
   >
     <WidgetHeader
-      :title="title"
+      :menuNm="menuNm"
       :isFullSize="isFullSize"
       @widgetHeaderClick="handleWidgetHeaderClick"
       @minimizeWidget="handleMinimizeWidget"
@@ -34,7 +34,7 @@
     />
     <WidgetBody
       :compoId="id"
-      :compoName="compoName"
+      :wdgtMenuNm="wdgtMenuNm"
       :compoData="compoData"
       @widgetBodyClick="handleWidgetHeaderClick"
       @widgetBodyReady="handleWidgetBodyReady"
@@ -62,12 +62,12 @@ export default {
       type: String,
       default: WIDGET.DRAG_HANDLE,
     },
-    compoName: {
+    wdgtMenuNm: {
       // Widget Body에 import할 클래스명
       type: String,
       required: true,
     },
-    title: {
+    menuNm: {
       // Widget Header에 바인딩할 title
       type: String,
       default: "Unknown",

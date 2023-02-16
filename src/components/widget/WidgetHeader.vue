@@ -1,7 +1,7 @@
 <template>
   <div class="widget-header" @click="$emit('widgetHeaderClick')">
     <section class="title-section widget-drag-handle">
-      <p>{{ title }}</p>
+      <p>{{ menuNm }}</p>
     </section>
     <section class="btn-section">
       <button title="왼쪽정렬" @click="$emit('leftSideWidget')">
@@ -38,7 +38,7 @@
 export default {
   name: "WidgetHeader",
   props: {
-    title: {
+    menuNm: {
       type: String,
       default: "Title",
     },

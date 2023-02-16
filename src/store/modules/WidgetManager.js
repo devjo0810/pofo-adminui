@@ -1,8 +1,8 @@
 /**
  * Widget Define
  * id : 고유키
- * title : 위젯 타이틀
- * compoName : 매핑할 컴포넌트명
+ * menuNm : 메뉴명
+ * wdgtMenuNm : 매핑할 컴포넌트명
  * compoData : 매핑할 컴포넌트 props
  * x : x좌표
  * y : y좌표
@@ -131,24 +131,24 @@ const actions = {
   // 위젯 생성
   createWidget(
     { state, commit, dispatch },
-    { title, compoName, compoData, isOnlyOne }
+    { menuNm, wdgtMenuNm, compoData, isOnlyOne }
   ) {
-    if (!compoName) {
-      Vue.toast.danger(`${title} 메뉴에 등록된 위젯 컴포넌트가 없습니다.`);
+    if (!wdgtMenuNm) {
+      Vue.toast.danger(`${menuNm} 메뉴에 등록된 위젯 컴포넌트가 없습니다.`);
       return;
     }
     if (isOnlyOne) {
       const widget = state.widgetList.find(
-        (item) => item.compoName === compoName
+        (item) => item.wdgtMenuNm === wdgtMenuNm
       );
       if (widget) {
         // dispatch("closeWidget", widget.id);
         dispatch("sortWidgetZindex", widget.id);
-        Vue.toast.warning(`${title} 이미 활성화된 위젯입니다.`);
+        Vue.toast.warning(`${menuNm} 이미 활성화된 위젯입니다.`);
         return;
       }
     }
-    commit("addWidget", { title, compoName, compoData, isOnlyOne });
+    commit("addWidget", { menuNm, wdgtMenuNm, compoData, isOnlyOne });
     commit("setNextWidgetPosition");
     // onlyOne 옵션이 있는 컴포넌트일 경우 기존 위젯 종료후 생성 >> 기능 변경
     // 이미 존재하는 위젯에 포커싱 처리 후 토스트 메세징 처리

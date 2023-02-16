@@ -26,7 +26,7 @@ import {
   setColumnByUseYn,
   setColumnByCode,
   appendRow,
-  getUnValidRow,
+  // getUnValidRow,
 } from "@/utils/tui-grid-handler";
 
 export default {
@@ -59,10 +59,16 @@ export default {
       ...TUI_GRID.update(),
       rowHeaders: ["checkbox"],
       treeColumnOptions: {
-        name: "menuId",
+        name: "menuNm",
         useCascadingCheckbox: false,
       },
       columns: [
+        {
+          header: "메뉴명",
+          name: "menuNm",
+          editor: "text",
+          validation: { required: true, dataType: "string" },
+        },
         {
           header: "메뉴아이디",
           name: "menuId",
@@ -81,11 +87,6 @@ export default {
           align: "right",
           editor: "text",
           validation: { required: true, dataType: "number", min: 0 },
-        },
-        {
-          header: "메뉴명",
-          name: "menuNm",
-          editor: "text",
         },
         {
           header: "위젯메뉴명",
@@ -144,7 +145,7 @@ export default {
       const { result } = await this.$http.get("/api/appmgmt/menus", {
         compoId: this.compoId,
       });
-      this.masterGridInstance.resetData(result.result);
+      this.masterGridInstance.resetData(result.data);
     },
     async save() {
       this.masterGridInstance.finishEditing();
@@ -154,15 +155,18 @@ export default {
         return;
       }
 
-      const unValidList = this.masterGridInstance.validate();
-      const isUnValidRow = getUnValidRow(rowKeys, unValidList);
-      if (isUnValidRow) {
-        this.$widget.alert(
-          this.compoId,
-          "선택된 항목중 유효하지 않은 값이 존재합니다."
-        );
-        return;
-      }
+      // console.log("valid check before===");
+      // const unValidList = this.masterGridInstance.validate();
+      // console.log("valid check===");
+      // const isUnValidRow = getUnValidRow(rowKeys, unValidList);
+      // console.log("valid check row===");
+      // if (isUnValidRow) {
+      //   this.$widget.alert(
+      //     this.compoId,
+      //     "선택된 항목중 유효하지 않은 값이 존재합니다."
+      //   );
+      //   return;
+      // }
 
       const items = this.masterGridInstance
         .getCheckedRows()

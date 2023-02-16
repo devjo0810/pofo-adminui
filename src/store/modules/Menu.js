@@ -1,4 +1,5 @@
 import Vue from "vue";
+import { MENU_DVSN } from "@/config";
 
 const state = {
   widgetMenuList: [],
@@ -19,11 +20,14 @@ const mutations = {
 const actions = {
   // 관리자메뉴 불러오기
   async loadAdminMenus({ commit }) {
-    let { result } = await Vue.http.get("/api/appmgmt/admin/menus");
+    const { result } = await Vue.http.get(
+      `/api/appmgmt/menus/${MENU_DVSN.ADMIN}`
+    );
     if (!result) {
-      result = sampleMenuList;
+      commit("setWidgetMenuList", sampleMenuList);
+    } else {
+      commit("setWidgetMenuList", result.data);
     }
-    commit("setWidgetMenuList", result);
   },
 };
 

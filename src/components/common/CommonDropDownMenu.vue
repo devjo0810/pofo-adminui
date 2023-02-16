@@ -1,9 +1,9 @@
 <template>
   <li class="common-drop-down-menu" @click.stop="handleClick(options)">
-    <span>{{ options.title }}</span>
+    <span>{{ options.menuNm }}</span>
     <ul v-if="subMenuShow" :class="subMenuWrapperClass">
       <CommonTreeMenu
-        v-for="(subMenu, i) in options.menuList"
+        v-for="(subMenu, i) in options._children"
         :key="i"
         :options="subMenu"
         @click="handleClick"
@@ -27,7 +27,7 @@ export default {
   computed: {
     subMenuShow() {
       const { options } = this;
-      if (options.menuList && options.menuList) {
+      if (options._children && options._children) {
         return true;
       } else {
         return false;

@@ -38,9 +38,9 @@ export default {
       openWidgetManagerConfigPopup: "Popup/openWidgetManagerConfig",
     }),
     handleMenuClick(menu) {
-      const { menuId, title, compoName, isWidget } = menu;
-      console.log("handleMenuClick", menuId, title, compoName, isWidget);
-      if (!isWidget) return;
+      const { menuYn } = menu;
+      // console.log("handleMenuClick", menuId, title, compoName, isWidget);
+      if (menuYn !== "1") return;
       this.createWidget(menu);
     },
   },

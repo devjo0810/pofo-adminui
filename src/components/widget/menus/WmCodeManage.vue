@@ -238,7 +238,7 @@ export default {
           compoId: this.compoId,
         }
       );
-      this.masterGridInstance.resetData(result.result);
+      this.masterGridInstance.resetData(result.data);
       this.detailGridInstance.resetData([]);
     },
     appendRowForMaster() {
@@ -293,7 +293,7 @@ export default {
           compoId: this.compoId,
         }
       );
-      this.detailGridInstance.resetData(result.result);
+      this.detailGridInstance.resetData(result.data);
     },
     appendRowForDetail() {
       appendRow(this.detailGridInstance, {
